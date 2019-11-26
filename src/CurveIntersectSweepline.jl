@@ -11,7 +11,9 @@ module CurveIntersectSweepline
     function runtests_sweepline()
         npassed = 0
         ntests = 0
-        println("Running sweepline intersect tests")
+        println("\n================================")
+        println("Running sweepline intersection tests: ")
+        println("================================")
 
         println("Sweepline intersect test summary")
         println("------------------------------")

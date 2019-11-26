@@ -10,8 +10,9 @@ module CurveIntersectNaive
     function runtests_naive()
         npassed = 0
         ntests = 0
-        println("Running naive intersect tests")
-
+        println("\n================================")
+        println("Running naive intersection tests: ")
+        println("================================")
         println("Naive intersect test summary")
         println("------------------------------")
         println("$npassed out of $ntests passed\n")

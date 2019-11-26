@@ -177,52 +177,38 @@ function findboxintersect_points(heirarchy1::BoxHeirarchy, heirarchy2::BoxHeirar
     return intersectpts
 end
 
-# loops through all curves in curvelist 1, cataloguing all intersections with
-# curves in curvelist 2. outputs two grids of x and y locations of intersection
-# points. This code assumes that all contours only intersect once
-function findmeshpoints(curvelist1::Array{Array{Float64, 2}, 1}, curvelist2::Array{Array{Float64, 2}, 1}, method="hbb")
-    if method != "hbb" && method != "naive"
-
-    end
+# loops through all m curves in curvelist 1, cataloguing all intersections with
+# all n curves in curvelist 2.
+# returns intersectgrid, an m by n grid of Array{Float64, 2}, where
+# intersectgrid[i,j] contains an array of all x and y points of intersection of
+# curve i with curve j
+function curveintersect_hb(curvelist1::Array{Array{Float64, 2}, 1}, curvelist2::Array{Array{Float64, 2}, 1})
 
     nc1 = length(curvelist1)
     nc2 = length(curvelist2)
-    xgrid = zeros(nc1, nc2)
-    ygrid = zeros(nc1, nc2)
+    intersectgrid = Array{Array{Float64, 2}, 2}(undef, nc1, nc2)
 
-    if method == "hbb"
-        # transform curves into bounding box heirarchies
-        bboxlist1 = Array{BoxHeirarchy, 1}(undef, nc1)
-        for i = 1:nc1
-            bboxlist1[i] = createboxheirarchy(curvelist1[i])
-        end
-        bboxlist2 = Array{BoxHeirarchy, 1}(undef, nc2)
-        for j = 1:nc2
-            bboxlist2[j] = createboxheirarchy(curvelist2[j])
-        end
-
-        for i = 1:nc1
-            heirarchy_i = bboxlist1[i]
-            for j = 1:nc2
-                heirarchy_j = bboxlist2[j]
-                intersectpts = findboxintersect_points(heirarchy_i, heirarchy_j)
-                if !isempty(intersectpts)
-                    xgrid[i,j] = intersectpts[1,1]
-                    ygrid[i,j] = intersectpts[1,2]
-                else
-                    xgrid[i,j] = Inf64
-                    ygrid[i,j] = Inf64
-                end
-            end
-        end
-
-    elseif method == "naive"
-
-    else
-        error("Invalid method selected: $method")
+    # transform curves into bounding box heirarchies
+    bboxlist1 = Array{BoxHeirarchy, 1}(undef, nc1)
+    for i = 1:nc1
+        bboxlist1[i] = createboxheirarchy(curvelist1[i])
+    end
+    bboxlist2 = Array{BoxHeirarchy, 1}(undef, nc2)
+    for j = 1:nc2
+        bboxlist2[j] = createboxheirarchy(curvelist2[j])
     end
 
-    return xgrid, ygrid
+    for i = 1:nc1
+        heirarchy_i = bboxlist1[i]
+        for j = 1:nc2
+            heirarchy_j = bboxlist2[j]
+            intersectpts = findboxintersect_points(heirarchy_i, heirarchy_j)
+            @show intersectpts
+            intersectgrid[i,j] = intersectpts
+        end
+    end
+
+    return intersectgrid
 end
 
 #given two box heirarchies, return list of lowest-level boxes that overlap
