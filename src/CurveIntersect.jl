@@ -13,21 +13,21 @@ module CurveIntersect
 
     export runtests, curveintersect, getintersectpoints
 
-    function curveintersect(curve1::Array{Float64, 2}, curve2::Array{Float64, 2}, method="none")
+    function curveintersect(curve1::Array{Float64, 2}, curve2::Array{Float64, 2}, verbose=false, method="none")
         if lowercase(method) ==  "none"
-            println("No algorithm selected. Choosing default...")
+            verbose ? println("No algorithm selected. Choosing default...") : 0
             method = "hbb"
         end
         if lowercase(method) == "naive"
-            println("Naive (O(n²)) method selected.")
+            verbose ? println("Naive (O(n²)) method selected.") : 0
             return curveintersect_naive(curve1, curve2)
 
         elseif lowercase(method) == "hbb"
-            println("Heirarchical bounding box method selected.")
+            verbose ? println("Heirarchical bounding box method selected.") : 0
             return curveintersect_hb(curve1, curve2)
 
         elseif lowercase(method) == "sweepline"
-            println("Sweepline method selected.")
+            verbose ? println("Sweepline method selected.") : 0
             return curveintersect_sweepline(curve1, curve2)
 
         else
@@ -35,21 +35,21 @@ module CurveIntersect
         end
     end
 
-    function curveintersect(curvelist1::Array{Array{Float64, 2},1}, curvelist2::Array{Array{Float64, 2},1}, method="none")
+    function curveintersect(curvelist1::Array{Array{Float64, 2},1}, curvelist2::Array{Array{Float64, 2},1}, verbose=false, method="none")
         if lowercase(method) ==  "none"
-            println("No algorithm selected. Choosing default...")
+            verbose ? println("No algorithm selected. Choosing default...") : 0
             method = "hbb"
         end
         if lowercase(method) == "naive"
-            println("Naive (O(n²)) method selected.")
+            verbose ? println("Naive (O(n²)) method selected.") : 0
             return curveintersect_naive(curvelist1, curvelist2)
 
         elseif lowercase(method) == "hbb"
-            println("Heirarchical bounding box method selected.")
+            verbose ? println("Heirarchical bounding box method selected.") : 0
             return curveintersect_hb(curvelist1, curvelist2)
 
         elseif lowercase(method) == "sweepline"
-            println("Sweepline method selected.")
+            verbose ? println("Sweepline method selected.") : 0
             return curveintersect_sweepline(curvelist1, curvelist2)
 
         else

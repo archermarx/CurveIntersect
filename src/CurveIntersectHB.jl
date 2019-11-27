@@ -203,7 +203,7 @@ function curveintersect_hb(curvelist1::Array{Array{Float64, 2}, 1}, curvelist2::
         for j = 1:nc2
             heirarchy_j = bboxlist2[j]
             intersectpts = findboxintersect_points(heirarchy_i, heirarchy_j)
-            @show intersectpts
+            #@show intersectpts
             intersectgrid[i,j] = intersectpts
         end
     end

@@ -1,5 +1,5 @@
 using Revise
-using CurveIntersect: curveintersect, runtests
+using CurveIntersect
 using Plots
 using Contour
 
@@ -11,20 +11,6 @@ function plotcontours(cont, clr=:black)
             plot!(xs, ys, label = "", linecolor = clr)
         end
     end
-end
-
-function getintersectpoints(intersectgrid)
-    xpts = Float64[]
-    ypts = Float64[]
-
-    for i in eachindex(intersectgrid)
-        if !isempty(intersectgrid[i])
-            append!(xpts, intersectgrid[i][:,1])
-            append!(ypts, intersectgrid[i][:,2])
-        end
-    end
-
-    return [xpts ypts]
 end
 
 
@@ -66,7 +52,7 @@ plotcontours(ch, :blue)
 plotcontours(cv, :red)
 
 intersectgrid = curveintersect(curvelist_h, curvelist_v)
-intersectpts = getintersectpts(intersectgrid)
+intersectpts = getintersectpoints(intersectgrid)
 scatter!(intersectpts[:,1], intersectpts[:,2], label="")
 
 display(c)
