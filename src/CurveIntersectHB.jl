@@ -211,6 +211,38 @@ function curveintersect_hb(curvelist1::Array{Array{Float64, 2}, 1}, curvelist2::
     return intersectgrid
 end
 
+# loops through all m curves in curvelist 1, cataloguing all intersections with
+# the other curves in curvelist 1
+# returns intersectgrid, an m by n grid of Array{Float64, 2}, where
+# intersectgrid[i,j] contains an array of all x and y points of intersection of
+# curve i with curve j. The diagonals where i = j are not checked
+function curveintersect_hb(curvelist1::Array{Array{Float64, 2}, 1})
+
+    nc1 = length(curvelist1)
+    nc2 = length(curvelist2)
+    intersectgrid = Array{Array{Float64, 2}, 2}(undef, nc1, nc2)
+
+    # transform curves into bounding box heirarchies
+    bboxlist1 = Array{BoxHeirarchy, 1}(undef, nc1)
+    for i = 1:nc1
+        bboxlist1[i] = createboxheirarchy(curvelist1[i])
+    end
+
+    for i = 1:nc1
+        heirarchy_i = bboxlist1[i]
+        for j = 1:nc1
+            if i != j
+                heirarchy_j = bboxlist1[j]
+                intersectpts = findboxintersect_points(heirarchy_i, heirarchy_j)
+                #@show intersectpts
+                intersectgrid[i,j] = intersectpts
+            end
+        end
+    end
+
+    return intersectgrid
+end
+
 #given two box heirarchies, return list of lowest-level boxes that overlap
 function findboxintersections(heirarchy1::BoxHeirarchy, heirarchy2::BoxHeirarchy, boxlist1::Array{BoxHeirarchy, 1}, boxlist2::Array{BoxHeirarchy, 1})
     # 1. check if top-level boxes intersect

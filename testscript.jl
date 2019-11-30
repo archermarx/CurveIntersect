@@ -13,20 +13,19 @@ function plotcontours(cont, clr=:black)
     end
 end
 
+x = range(-0.1, stop=1, length=1000)
+y = range(-0.1, stop=1, length=1000)
 
-x = range(0, stop=1, length=103)
-y = range(0, stop=1, length=103)
-
-xgrid = [xi-0.1*yi for xi in x, yi in y]
-ygrid = [yi-0.1*xi for xi in x, yi in y]
+xgrid = [xi-yi^2 for xi in x, yi in y]
+ygrid = [xi+yi^2 for xi in x, yi in y]
 
 #c = Plots.contour(x, y, xgrid, levels=11, color=:blue, colorbar=false)
 #Plots.contour!(x, y, ygrid, levels=11, color=:red, colorbar=false)
 
-x_new = range(minimum(xgrid)/1.1, stop=maximum(xgrid)*1.1, length=103)
-y_new = range(minimum(ygrid)/1.1, stop=maximum(ygrid)*1.1, length=103)
-ch = Contour.contours(x_new, y_new, xgrid, 11)
-cv = Contour.contours(x_new, y_new, ygrid, 11)
+x_new = range(minimum(xgrid), stop=maximum(xgrid), length=1000)
+y_new = range(minimum(ygrid), stop=maximum(ygrid), length=1000)
+ch = Contour.contours(x, y, xgrid, 15)
+cv = Contour.contours(x, y, ygrid, 15)
 
 nh = length(levels(ch))
 nv = length(levels(cv))

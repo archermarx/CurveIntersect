@@ -13,44 +13,24 @@ module CurveIntersect
 
     export runtests, curveintersect, getintersectpoints
 
-    function curveintersect(curve1::Array{Float64, 2}, curve2::Array{Float64, 2}, verbose=false, method="none")
+    function curveintersect(args, verbose::Bool=false, method::String="none")
+        println("You are using the most up-to-date version of this code")
+
         if lowercase(method) ==  "none"
             verbose ? println("No algorithm selected. Choosing default...") : 0
             method = "hbb"
         end
         if lowercase(method) == "naive"
             verbose ? println("Naive (O(n²)) method selected.") : 0
-            return curveintersect_naive(curve1, curve2)
+            return curveintersect_naive(args...)
 
         elseif lowercase(method) == "hbb"
             verbose ? println("Heirarchical bounding box method selected.") : 0
-            return curveintersect_hb(curve1, curve2)
+            return curveintersect_hb(args...)
 
         elseif lowercase(method) == "sweepline"
             verbose ? println("Sweepline method selected.") : 0
-            return curveintersect_sweepline(curve1, curve2)
-
-        else
-            error("Invalid curve intersection algorithm. Select \"naive\", \"hbb\", or \"sweepline\"")
-        end
-    end
-
-    function curveintersect(curvelist1::Array{Array{Float64, 2},1}, curvelist2::Array{Array{Float64, 2},1}, verbose=false, method="none")
-        if lowercase(method) ==  "none"
-            verbose ? println("No algorithm selected. Choosing default...") : 0
-            method = "hbb"
-        end
-        if lowercase(method) == "naive"
-            verbose ? println("Naive (O(n²)) method selected.") : 0
-            return curveintersect_naive(curvelist1, curvelist2)
-
-        elseif lowercase(method) == "hbb"
-            verbose ? println("Heirarchical bounding box method selected.") : 0
-            return curveintersect_hb(curvelist1, curvelist2)
-
-        elseif lowercase(method) == "sweepline"
-            verbose ? println("Sweepline method selected.") : 0
-            return curveintersect_sweepline(curvelist1, curvelist2)
+            return curveintersect_sweepline(args...)
 
         else
             error("Invalid curve intersection algorithm. Select \"naive\", \"hbb\", or \"sweepline\"")
