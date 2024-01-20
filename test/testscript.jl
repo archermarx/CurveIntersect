@@ -13,8 +13,17 @@ function plotcontours(cont, clr=:black)
     end
 end
 
-x = range(-0.1, stop=1, length=1000)
-y = range(-0.1, stop=1, length=1000)
+function plotcurvelist(curvelist, clr=:black)
+    for c in curvelist
+        plot!(c[1,:], c[2,:], linecolor=clr, label="")
+    end
+end
+
+xrange = (-0.1, 1.2)
+yrange = (-0.1, 1.2)
+
+x = range(xrange[1], stop=xrange[2], length=1000)
+y = range(yrange[1], stop=yrange[2], length=1000)
 
 xgrid = [xi-yi^2 for xi in x, yi in y]
 ygrid = [xi+yi^2 for xi in x, yi in y]
@@ -22,8 +31,6 @@ ygrid = [xi+yi^2 for xi in x, yi in y]
 #c = Plots.contour(x, y, xgrid, levels=11, color=:blue, colorbar=false)
 #Plots.contour!(x, y, ygrid, levels=11, color=:red, colorbar=false)
 
-x_new = range(minimum(xgrid), stop=maximum(xgrid), length=1000)
-y_new = range(minimum(ygrid), stop=maximum(ygrid), length=1000)
 ch = Contour.contours(x, y, xgrid, 15)
 cv = Contour.contours(x, y, ygrid, 15)
 
@@ -46,12 +53,20 @@ for i = 1:nv
     curve = [xs ys]
     curvelist_v[i] = curve
 end
-c = plot()
-plotcontours(ch, :blue)
-plotcontours(cv, :red)
 
 intersectgrid = curveintersect(curvelist_h, curvelist_v)
 intersectpts = getintersectpoints(intersectgrid)
-scatter!(intersectpts[:,1], intersectpts[:,2], label="")
 
+boundarycurve1 = [x, yrange[1]*ones(Float64, length(x))]
+boundarycurve2 = [x, yrange[2]*ones(Float64, length(x))]
+boundarycurve3 = [xrange[1]*ones(Float64, length(x)), y]
+boundarycurve4 = [xrange[2]*ones(Float64, length(x)), y]
+boundarycurves = [boundarycurve1, boundarycurve2, boundarycurve3, boundarycurve4]
+
+c = plot()
+plotcontours(ch, :blue)
+plotcontours(cv, :red)
+plotcurvelist(boundarycurves)
+scatter!(intersectpts[:,1], intersectpts[:,2], label="")
+#mesh =  createmeshfromcontours(curvelist_h, curvelish_v)
 display(c)
